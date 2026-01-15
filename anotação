@@ -1,0 +1,15 @@
+criar um bool sobre se recebe ou nao bolsa familia
+criar um bool para aluno de inclusao
+A turma tem que ter o número de capacidade de vagas para se digitado
+  não pode ultrapassar o número de vagas previamente digitado
+ 
+  A lista de alunos na turma precisa ter o número da vaga ao lado.
+segue exemplo
+nº - nome - data nascimento - turno - data matricula - faltas - observação
+1 - João - 01/02/2023 - tarde - 01/02/2026 - 0 - em branco
+joão é aluno inclusão, true para aluno inclusão, a proxima linha será
+2 - Vaga vinculada de inclusão e o resto dos campos em branco
+e a turma já possui 2 vagas preenchidas
+Próximas vagas sem inclusão
+3 - Maria - 01/02/2023 - tarde - 01/02/2026 - 0 - em branco
+4 - Lorena - 01/02/2023 - tarde - 01/02/2026 - 0 - em branco
