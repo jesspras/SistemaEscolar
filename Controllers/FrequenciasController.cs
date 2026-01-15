@@ -3,98 +3,178 @@ using Microsoft.EntityFrameworkCore;
 using SistemaEscolar.Data;
 using SistemaEscolar.Models;
 using SistemaEscolar.ViewModels;
-
-public class FrequenciasController : Controller
+using Rotativa.AspNetCore;
+namespace SistemaEscolar.Controllers
 {
-    private readonly SistemaEscolarContext _context;
-
-    public FrequenciasController(SistemaEscolarContext context)
+    public class FrequenciasController : Controller
     {
-        _context = context;
-    }
+        private readonly SistemaEscolarContext _context;
 
-    // LISTA DE TURMAS PARA ESCOLHA
-    public IActionResult Index()
-    {
-        var turmas = _context.Turmas
-            .Select(t => new
-            {
-                t.TurmaId,
-                t.Nome,
-                t.Turno
-            })
-            .ToList();
-
-        return View(turmas);
-    }
-
-    // GET – REGISTRAR / EDITAR FREQUÊNCIA MENSAL
-    public IActionResult Registrar(int turmaId)
-    {
-        var turma = _context.Turmas
-            .Include(t => t.Alunos)
-            .FirstOrDefault(t => t.TurmaId == turmaId);
-
-        if (turma == null)
-            return NotFound();
-
-        var mes = DateTime.Now.Month;
-        var ano = DateTime.Now.Year;
-
-        var frequenciasExistentes = _context.Frequencias
-            .Where(f => f.Mes == mes && f.Ano == ano)
-            .ToList();
-
-        var vm = new FrequenciaViewModel
+        public FrequenciasController(SistemaEscolarContext context)
         {
-            TurmaId = turma.TurmaId,
-            NomeTurma = turma.Nome,
-            Mes = mes,
-            Ano = ano,
-            DiasLetivos = frequenciasExistentes.FirstOrDefault()?.DiasLetivos ?? 0,
-            Alunos = turma.Alunos.Select(a =>
-            {
-                var freq = frequenciasExistentes.FirstOrDefault(f => f.AlunoId == a.AlunoId);
+            _context = context;
+        }
 
-                return new FrequenciaAlunoViewModel
+        // LISTA DE TURMAS PARA ESCOLHA
+        public IActionResult Index()
+        {
+            var turmas = _context.Turmas
+                .Select(t => new
                 {
-                    AlunoId = a.AlunoId,
-                    Nome = a.Nome,
-                    DataNascimento = a.DataNascimento,
-                    Faltas = freq?.Faltas ?? 0,
-                    PercentualPresenca = freq?.PercentualPresenca ?? 0
-                };
-            }).ToList()
-        };
+                    t.TurmaId,
+                    t.Nome,
+                    t.Turno
+                })
+                .ToList();
 
-        return View(vm);
-    }
+            return View(turmas);
+        }
 
-    // POST – SALVAR FREQUÊNCIA
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Registrar(FrequenciaViewModel vm)
-    {
-        if (!ModelState.IsValid)
+        // GET – REGISTRAR / EDITAR FREQUÊNCIA MENSAL
+        public IActionResult Registrar(int turmaId)
+        {
+            var turma = _context.Turmas
+                .Include(t => t.Alunos)
+                .FirstOrDefault(t => t.TurmaId == turmaId);
+
+            if (turma == null)
+                return NotFound();
+
+            var mes = DateTime.Now.Month;
+            var ano = DateTime.Now.Year;
+
+            var frequenciasExistentes = _context.Frequencias
+                .Where(f => f.Mes == mes && f.Ano == ano)
+                .ToList();
+
+            var vm = new FrequenciaViewModel
+            {
+                TurmaId = turma.TurmaId,
+                NomeTurma = turma.Nome,
+                Mes = mes,
+                Ano = ano,
+                DiasLetivos = frequenciasExistentes.FirstOrDefault()?.DiasLetivos ?? 0,
+                Alunos = turma.Alunos.Select(a =>
+                {
+                    var freq = frequenciasExistentes.FirstOrDefault(f => f.AlunoId == a.AlunoId);
+
+                    return new FrequenciaAlunoViewModel
+                    {
+                        AlunoId = a.AlunoId,
+                        Nome = a.Nome,
+                        DataNascimento = a.DataNascimento,
+                        Faltas = freq?.Faltas ?? 0,
+                        PercentualPresenca = freq?.PercentualPresenca ?? 0
+                    };
+                }).ToList()
+            };
+
             return View(vm);
-
-        foreach (var aluno in vm.Alunos)
+        }
+        private FrequenciaViewModel MontarFrequenciaViewModel(int turmaId, int mes, int ano)
         {
-            var percentual = ((decimal)(vm.DiasLetivos - aluno.Faltas) / vm.DiasLetivos) * 100;
+            var turma = _context.Turmas
+                .Include(t => t.Alunos)
+                .FirstOrDefault(t => t.TurmaId == turmaId);
 
-            var frequencia = _context.Frequencias.FirstOrDefault(f =>
-                f.AlunoId == aluno.AlunoId &&
-                f.Mes == vm.Mes &&
-                f.Ano == vm.Ano);
+            if (turma == null)
+                return null;
 
-            if (frequencia == null)
+            var frequenciasExistentes = _context.Frequencias
+                .Where(f => f.Mes == mes && f.Ano == ano)
+                .ToList();
+
+            var vm = new FrequenciaViewModel
             {
-                _context.Frequencias.Add(new Frequencia
+                TurmaId = turma.TurmaId,
+                NomeTurma = turma.Nome,
+                Mes = mes,
+                Ano = ano,
+                DiasLetivos = frequenciasExistentes.FirstOrDefault()?.DiasLetivos ?? 0,
+                Alunos = turma.Alunos.Select(a =>
                 {
-                    AlunoId = aluno.AlunoId,
-                    Mes = vm.Mes,
-                    Ano = vm.Ano,
-                    DiasLetivos = vm.DiasLetivos,
-                    Faltas = aluno.Faltas,
-                }
+                    var freq = frequenciasExistentes
+                        .FirstOrDefault(f => f.AlunoId == a.AlunoId);
 
+                    return new FrequenciaAlunoViewModel
+                    {
+                        AlunoId = a.AlunoId,
+                        Nome = a.Nome,
+                        DataNascimento = a.DataNascimento,
+                        Faltas = freq?.Faltas ?? 0,
+                        PercentualPresenca = freq?.PercentualPresenca ?? 0
+                    };
+                }).ToList()
+            };
+
+            return vm;
+        }
+
+
+        //PDF SMED OFICIAL
+        public IActionResult PdfOficial(int turmaId, int mes, int ano)
+        {
+            var vm = MontarFrequenciaViewModel(turmaId, mes, ano);
+
+            if (vm == null)
+                return NotFound();
+
+            return new ViewAsPdf("PdfOficial", vm)
+            {
+                FileName = $"Frequencia_SMED_{mes}_{ano}.pdf"
+            };
+        }
+
+
+        // POST – SALVAR FREQUÊNCIA
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Registrar(FrequenciaViewModel vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            foreach (var aluno in vm.Alunos)
+            {
+                var percentual = ((decimal)(vm.DiasLetivos - aluno.Faltas) / vm.DiasLetivos) * 100;
+
+                var frequencia = _context.Frequencias.FirstOrDefault(f =>
+                    f.AlunoId == aluno.AlunoId &&
+                    f.Mes == vm.Mes &&
+                    f.Ano == vm.Ano);
+
+                if (frequencia == null)
+                {
+                    _context.Frequencias.Add(new Frequencia
+                    {
+                        AlunoId = aluno.AlunoId,
+                        Mes = vm.Mes,
+                        Ano = vm.Ano,
+                        DiasLetivos = vm.DiasLetivos,
+                        Faltas = aluno.Faltas,
+                        PercentualPresenca = percentual
+                    });
+                }
+                else
+                {
+                    // caso já exista, atualiza
+                    frequencia.DiasLetivos = vm.DiasLetivos;
+                    frequencia.Faltas = aluno.Faltas;
+                    frequencia.PercentualPresenca = percentual;
+                }
+            }
+
+            _context.SaveChanges();
+
+            // REDIRECIONA PARA EVITAR DUPLO POST
+            return RedirectToAction(nameof(Registrar), new
+            {
+                turmaId = vm.TurmaId,
+                mes = vm.Mes,
+                ano = vm.Ano
+            });
+        }
+
+    }
+
+}

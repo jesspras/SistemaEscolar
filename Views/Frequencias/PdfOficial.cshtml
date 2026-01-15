@@ -1,0 +1,100 @@
+﻿@model SistemaEscolar.ViewModels.FrequenciaViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+
+        h2, h3 {
+            text-align: center;
+            margin: 4px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+
+        .cabecalho {
+            margin-bottom: 15px;
+        }
+
+        .rodape {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cabecalho">
+        <h2>FREQUÊNCIA ESCOLAR – EDUCAÇÃO INFANTIL</h2>
+        <h3>@Model.NomeTurma – Turno: __________</h3>
+        <p>
+            <strong>Mês:</strong> @Model.Mes / @Model.Ano <br />
+            <strong>Dias Letivos:</strong> @Model.DiasLetivos
+        </p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Data Nasc.</th>
+                <th>Turno</th>
+                <th>Data Matrícula</th>
+                <th>Faltas</th>
+                <th>Observações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var aluno in Model.Alunos)
+            {
+                <tr>
+                    <td>@aluno.Nome</td>
+                    <td>@aluno.DataNascimento.ToString("dd/MM/yyyy")</td>
+                    <td>_____</td>
+                    <td>_____</td>
+                    <td style="text-align:center">@aluno.Faltas</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="rodape">
+        <p>
+            Declaro que as informações acima correspondem à frequência mensal dos alunos.
+        </p>
+
+        <br /><br />
+
+        ___________________________________________<br />
+        Assinatura da Direção / Coordenação
+
+        <br /><br />
+
+        Data: ____ / ____ / ______
+    </div>
+
+</body>
+</html>

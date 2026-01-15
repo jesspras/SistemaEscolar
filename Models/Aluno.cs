@@ -5,6 +5,7 @@
         public int AlunoId { get; set; }
         public string Nome { get; set; }
         public DateTime DataNascimento { get; set; }
+        public DateTime DataMatricula { get; set; }
         public string Cor { get; set; }
         public string Sexo { get; set; }
         public string CPF { get; set; }

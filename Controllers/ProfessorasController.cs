@@ -2,52 +2,54 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SistemaEscolar.Data;
 using SistemaEscolar.Models;
-
-public class ProfessorasController : Controller
+namespace SistemaEscolar.Controllers
 {
-    private readonly SistemaEscolarContext _context;
-
-    public ProfessorasController(SistemaEscolarContext context)
+    public class ProfessorasController : Controller
     {
-        _context = context;
-    }
+        private readonly SistemaEscolarContext _context;
 
-    public IActionResult Index()
-    {
-        return View(_context.Professoras.ToList());
-    }
+        public ProfessorasController(SistemaEscolarContext context)
+        {
+            _context = context;
+        }
 
-    public IActionResult Create()
-    {
-        return View();
-    }
+        public IActionResult Index()
+        {
+            return View(_context.Professoras.ToList());
+        }
 
-    [HttpPost]
-    public IActionResult Create(Professora professora)
-    {
-        if (!ModelState.IsValid)
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Professora professora)
+        {
+            if (!ModelState.IsValid)
+                return View(professora);
+
+            _context.Professoras.Add(professora);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var professora = _context.Professoras.Find(id);
+            if (professora == null) return NotFound();
             return View(professora);
+        }
 
-        _context.Professoras.Add(professora);
-        _context.SaveChanges();
-        return RedirectToAction(nameof(Index));
-    }
+        [HttpPost]
+        public IActionResult Edit(Professora professora)
+        {
+            if (!ModelState.IsValid)
+                return View(professora);
 
-    public IActionResult Edit(int id)
-    {
-        var professora = _context.Professoras.Find(id);
-        if (professora == null) return NotFound();
-        return View(professora);
-    }
-
-    [HttpPost]
-    public IActionResult Edit(Professora professora)
-    {
-        if (!ModelState.IsValid)
-            return View(professora);
-
-        _context.Update(professora);
-        _context.SaveChanges();
-        return RedirectToAction(nameof(Index));
+            _context.Update(professora);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

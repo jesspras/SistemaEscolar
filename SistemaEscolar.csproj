@@ -4,14 +4,13 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>SistemaEscolar</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Uploads\Historico\" />
     <Folder Include="Uploads\Pareceres\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +25,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="QuestPDF" Version="2025.12.2" />
+    <PackageReference Include="Rotativa" Version="1.7.3" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.4.0" />
+    <PackageReference Include="Rotativa.Core" Version="2.0.2.1" />
+    <PackageReference Include="Rotativa.MVC" Version="2.0.3" />
   </ItemGroup>
 
 </Project>

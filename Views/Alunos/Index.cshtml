@@ -1,39 +1,24 @@
-@model IEnumerable<SistemaEscolar.Models.Aluno>
-
 @{
-    ViewData["Title"] = "Alunos";
+    Layout = "_Layout";
 }
 
-<h2>Alunos</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Alunos</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Novo Aluno</a>
-</p>
+    <a asp-action="Create" class="btn btn-success">
+        + Novo Aluno
+    </a>
+</div>
 
-<table class="table table-bordered table-striped">
-    <thead>
+<table class="table table-striped table-hover">
+    <thead class="table-primary">
         <tr>
             <th>Nome</th>
             <th>Turma</th>
-            <th>Data Nasc.</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var aluno in Model)
-        {
-            <tr>
-                <td>@aluno.Nome</td>
-                <td>@aluno.Turma?.Nome</td>
-                <td>@aluno.DataNascimento.ToString("dd/MM/yyyy")</td>
-                <td>
-                    <a asp-action="Edit"
-                       asp-route-id="@aluno.AlunoId"
-                       class="btn btn-sm btn-warning">
-                        Editar
-                    </a>
-                </td>
-            </tr>
-        }
+        <!-- foreach depois -->
     </tbody>
 </table>

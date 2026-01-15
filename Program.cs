@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SistemaEscolar.Data;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,4 +27,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+/*RotativaConfiguration.Setup(
+    builder.Environment.WebRootPath,
+    "Rotativa"
+);/*/
 app.Run();

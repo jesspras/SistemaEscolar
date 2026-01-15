@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-
+namespace SistemaEscolar.ViewModels
+{ 
 public class FrequenciaAlunoViewModel
 {
     public int AlunoId { get; set; }
@@ -10,4 +11,5 @@ public class FrequenciaAlunoViewModel
     public int Faltas { get; set; }
 
     public decimal PercentualPresenca { get; set; }
+}
 }

@@ -1,0 +1,65 @@
+@model IEnumerable<SistemaEscolar.Models.Turma>
+
+@{
+    ViewData["Title"] = "Turmas";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Turmas</h2>
+
+    <a asp-action="Create" class="btn btn-primary">
+        ➕ Nova Turma
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Nenhuma turma cadastrada.
+    </div>
+}
+else
+{
+    <table class="table table-striped table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Nome</th>
+                <th>Turno</th>
+                <th>Horário</th>
+                <th>Professoras</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var turma in Model)
+            {
+                <tr>
+                    <td>@turma.Nome</td>
+
+                    <td>@turma.Turno</td>
+
+                    <td>
+                        @turma.HoraInicio.ToString(@"hh\:mm")
+                        -
+                        @turma.HoraFim.ToString(@"hh\:mm")
+                    </td>
+
+                    <td>
+                        @if (turma.Professoras != null && turma.Professoras.Any())
+                        {
+                            <ul class="mb-0">
+                                @foreach (var prof in turma.Professoras)
+                                {
+                                    <li>@prof.Nome</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Sem professoras</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
