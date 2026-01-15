@@ -1,0 +1,36 @@
+@model SistemaEscolar.ViewModels.FrequenciaViewModel
+
+@{
+    ViewData["Title"] = "Consultar Frequência";
+}
+
+<h2>Consulta de Frequência</h2>
+
+<p>
+    <strong>Turma:</strong> @Model.NomeTurma <br />
+    <strong>Mês/Ano:</strong> @Model.Mes / @Model.Ano
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Aluno</th>
+            <th>Faltas</th>
+            <th>Dias Letivos</th>
+            <th>Frequência (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var aluno in Model.Alunos)
+        {
+            <tr class="@(aluno.PercentualPresenca < 60 ? "table-danger" : "")">
+                <td>@aluno.Nome</td>
+                <td>@aluno.Faltas</td>
+                <td>@Model.DiasLetivos</td>
+                <td>@aluno.PercentualPresenca.ToString("N2")%</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Voltar</a>

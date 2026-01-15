@@ -1,0 +1,107 @@
+@model IEnumerable<SistemaEscolar.ViewModels.AlunoRiscoViewModel>
+
+@{
+    ViewData["Title"] = "Sistema Escolar";
+}
+
+<h2>Sistema de Gerenciamento Escolar</h2>
+
+<div class="row">
+
+    <!-- ALERTA DE FREQUÊNCIA -->
+    <div class="col-md-6">
+        <div class="card border-danger mb-4">
+            <div class="card-header bg-danger text-white">
+                Alunos com Frequência Abaixo de 60% – Mês Atual
+            </div>
+
+            <div class="card-body">
+                @if (!Model.Any())
+                {
+                    <p class="text-success">
+                        Nenhum aluno abaixo do limite neste mês.
+                    </p>
+                }
+                else
+                {
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Turma</th>
+                                <th>Frequência</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var aluno in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-action="Aluno"
+                                           asp-route-id="@aluno.AlunoId">
+                                            @aluno.Nome
+                                        </a>
+                                    </td>
+                                    <td>@aluno.Turma</td>
+                                    <td class="text-danger">
+                                        @aluno.PercentualPresenca.ToString("N2")%
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- BUSCA RÁPIDA -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                Busca Rápida de Aluno (Emergência)
+            </div>
+            <div class="card-body">
+                <input type="text"
+                       id="buscaAluno"
+                       class="form-control"
+                       placeholder="Digite o nome do aluno..." />
+
+                <ul class="list-group mt-2" id="resultadoBusca"></ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        const input = document.getElementById('buscaAluno');
+        const lista = document.getElementById('resultadoBusca');
+
+        input.addEventListener('keyup', () => {
+            const termo = input.value.trim();
+
+            if (termo.length < 2) {
+                lista.innerHTML = '';
+                return;
+            }
+
+            fetch(`/Home/BuscarAluno?nome=${termo}`)
+                .then(r => r.json())
+                .then(data => {
+                    lista.innerHTML = '';
+
+                    data.forEach(aluno => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item list-group-item-action';
+                        li.innerText = aluno.nome;
+                        li.onclick = () => {
+                            window.location.href = `/Home/Aluno/${aluno.alunoId}`;
+                        };
+                        lista.appendChild(li);
+                    });
+                });
+        });
+    </script>
+}

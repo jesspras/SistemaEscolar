@@ -1,0 +1,15 @@
+@model SistemaEscolar.ViewModels.AlunoViewModel
+
+@{
+    ViewData["Title"] = "Cadastrar Aluno";
+}
+
+<h2>Cadastrar Aluno</h2>
+
+<hr />
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <partial name="_AlunoForm" model="Model" />
+</form>

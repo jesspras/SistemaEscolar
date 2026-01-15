@@ -1,0 +1,41 @@
+@model IEnumerable<SistemaEscolar.Models.Professora>
+
+@{
+    ViewData["Title"] = "Professoras";
+}
+
+<h2>Professoras</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nova Professora</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Telefone</th>
+            <th>Formação</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var prof in Model)
+        {
+            <tr>
+                <td>@prof.Nome</td>
+                <td>@prof.CPF</td>
+                <td>@prof.Telefone</td>
+                <td>@prof.Formacao</td>
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@prof.ProfessoraId"
+                       class="btn btn-sm btn-warning">
+                        Editar
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

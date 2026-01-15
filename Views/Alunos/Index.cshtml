@@ -1,0 +1,39 @@
+@model IEnumerable<SistemaEscolar.Models.Aluno>
+
+@{
+    ViewData["Title"] = "Alunos";
+}
+
+<h2>Alunos</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Novo Aluno</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Turma</th>
+            <th>Data Nasc.</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var aluno in Model)
+        {
+            <tr>
+                <td>@aluno.Nome</td>
+                <td>@aluno.Turma?.Nome</td>
+                <td>@aluno.DataNascimento.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@aluno.AlunoId"
+                       class="btn btn-sm btn-warning">
+                        Editar
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

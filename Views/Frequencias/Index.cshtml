@@ -1,0 +1,33 @@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Controle de Frequência";
+}
+
+<h2>Controle de Frequência</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Turma</th>
+            <th>Turno</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var turma in Model)
+        {
+            <tr>
+                <td>@turma.Nome</td>
+                <td>@turma.Turno</td>
+                <td>
+                    <a asp-action="Registrar"
+                       asp-route-turmaId="@turma.TurmaId"
+                       class="btn btn-sm btn-primary">
+                        Registrar Frequência
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,80 @@
+@model SistemaEscolar.ViewModels.FrequenciaViewModel
+
+@{
+    ViewData["Title"] = "Registrar Frequência";
+}
+
+<h2>Frequência – @Model.NomeTurma</h2>
+<p><strong>Mês:</strong> @Model.Mes / @Model.Ano</p>
+
+<form asp-action="Registrar" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="TurmaId" />
+    <input type="hidden" asp-for="Mes" />
+    <input type="hidden" asp-for="Ano" />
+
+    <div class="mb-3">
+        <label asp-for="DiasLetivos" class="form-label"></label>
+        <input asp-for="DiasLetivos" class="form-control" />
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Aluno</th>
+                <th>Nascimento</th>
+                <th>Faltas</th>
+                <th>% Presença</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Alunos.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model.Alunos[i].Nome
+                        <input type="hidden" asp-for="Alunos[@i].AlunoId" />
+                        <input type="hidden" asp-for="Alunos[@i].Nome" />
+                        <input type="hidden" asp-for="Alunos[@i].DataNascimento" />
+                    </td>
+                    <td>
+                        @Model.Alunos[i].DataNascimento.ToShortDateString()
+                    </td>
+                    <td>
+                        <input asp-for="Alunos[@i].Faltas"
+                               class="form-control faltas"
+                               data-index="@i" />
+                    </td>
+                    <td>
+                        <span id="percentual-@i">
+                            @Model.Alunos[i].PercentualPresenca.ToString("F2")%
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelectorAll('.faltas').forEach(input => {
+            input.addEventListener('input', function () {
+                const diasLetivos = parseInt(document.getElementById("DiasLetivos").value) || 0;
+                const faltas = parseInt(this.value) || 0;
+                const index = this.dataset.index;
+
+                if (diasLetivos > 0) {
+                    const percentual = ((diasLetivos - faltas) / diasLetivos * 100).toFixed(2);
+                    document.getElementById(`percentual-${index}`).innerText = percentual + "%";
+                }
+            });
+        });
+    </script>
+}

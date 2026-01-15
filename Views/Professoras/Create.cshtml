@@ -1,0 +1,64 @@
+@model SistemaEscolar.Models.Professora
+
+@{
+    ViewData["Title"] = "Cadastrar Professora";
+}
+
+<h2>Cadastrar Professora</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Nome" class="form-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CPF" class="form-label"></label>
+        <input asp-for="CPF" class="form-control" />
+        <span asp-validation-for="CPF" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Telefone" class="form-label"></label>
+        <input asp-for="Telefone" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DataNascimento" class="form-label"></label>
+        <input asp-for="DataNascimento" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Formacao" class="form-label"></label>
+        <input asp-for="Formacao" class="form-control" />
+    </div>
+
+    <fieldset class="border p-3 mb-3">
+        <legend class="w-auto px-2">Endereço</legend>
+
+        <div class="mb-2">
+            <label asp-for="Rua" class="form-label"></label>
+            <input asp-for="Rua" class="form-control" />
+        </div>
+
+        <div class="mb-2">
+            <label asp-for="Bairro" class="form-label"></label>
+            <input asp-for="Bairro" class="form-control" />
+        </div>
+
+        <div class="mb-2">
+            <label asp-for="CEP" class="form-label"></label>
+            <input asp-for="CEP" class="form-control" />
+        </div>
+    </fieldset>
+
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

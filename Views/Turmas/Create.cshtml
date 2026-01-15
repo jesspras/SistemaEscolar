@@ -1,0 +1,68 @@
+@model SistemaEscolar.ViewModels.TurmaViewModel
+
+@{
+    ViewData["Title"] = "Cadastrar Turma";
+}
+
+<h2>Cadastrar Turma</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Nome" class="form-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Turno" class="form-label"></label>
+        <select asp-for="Turno" class="form-select">
+            <option value="">Selecione</option>
+            <option value="Manhã">Manhã</option>
+            <option value="Tarde">Tarde</option>
+            <option value="Integral">Integral</option>
+        </select>
+        <span asp-validation-for="Turno" class="text-danger"></span>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="HoraInicio" class="form-label"></label>
+            <input asp-for="HoraInicio" type="time" class="form-control" />
+        </div>
+        <div class="col">
+            <label asp-for="HoraFim" class="form-label"></label>
+            <input asp-for="HoraFim" type="time" class="form-control" />
+        </div>
+    </div>
+
+    <hr />
+
+    <h5>Professoras</h5>
+
+    @foreach (var prof in Model.Professoras)
+    {
+        <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="ProfessorasSelecionadas"
+                   value="@prof.ProfessoraId"
+                   @(prof.Selecionada ? "checked" : "") />
+            <label class="form-check-label">@prof.Nome</label>
+        </div>
+    }
+
+    <span class="text-danger">
+        @Html.ValidationSummary(false)
+    </span>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

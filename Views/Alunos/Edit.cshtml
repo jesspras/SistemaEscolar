@@ -1,0 +1,17 @@
+@model SistemaEscolar.ViewModels.AlunoViewModel
+
+@{
+    ViewData["Title"] = "Editar Aluno";
+}
+
+<h2>Editar Aluno</h2>
+
+<hr />
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="AlunoId" />
+
+    <partial name="_AlunoForm" model="Model" />
+</form>
